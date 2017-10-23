@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Add a Blog Entry</h2>
+
+    <form action="/newpost" method="post">
+        <label>
+            Title for Your New Blog:
+          <br>
+          <input type="text" name="title" method="post" value='{{request.form['title']}}'/>   
+            
+                <span class="error" style="color:red;">{{title_error}}</span> 
+            
+        </label>
+        <br>
+        <label>
+          Your Blog Entry Here:
+          <br>
+          <textarea type="text" name="body" method="post" style="height: 300px; width: 300px; margin: 10px 0; padding: 10px; border-radius: 10px;" value='{{request.form['body']}}'></textarea>  
+          <span class="error" style="color:red;">{{body_error}}</span> 
+        </label>
+        <br>
+        <input type="submit" value="Add Entry"/>
+    </form>
+
+{%endblock%}

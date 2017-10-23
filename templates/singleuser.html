@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form value={{user}}>
+<p>
+    <h1 style ='color:green'><strong>{{user.email}}</strong></h1>
+</p>
+{% for blog in blogs %}
+    <h3>{{blog.title}}</h3>
+    <h5>{{blog.body}}</h5>
+
+{% endfor %}
+<p>
+    
+</p>
+
+{% endblock %} 
