@@ -13,14 +13,9 @@
     <h3>{{blog.body}}</h3>
 
     Written by: 
-    {% for user in users %}
-        {% if blog in user.blogs %}
-            <a href = '/?id={{user.id}}'>
-                {{user.username}}
-            </a>
-        {% endif %}
-    {% endfor %}
-
+    
+            <a href = '/?id={{blog.writer.id}}'>{{blog.writer.email}}</a>
+    
     <HR>
 
 {% endfor %}

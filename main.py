@@ -15,6 +15,7 @@ class Blog(db.Model):
     title = db.Column(db.String(120))
     body = db.Column(db.String(1000))
     writer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    writer = db.relationship('User')
     
     def __init__(self, title, body, writer):
         self.title = title
@@ -25,7 +26,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(120))
-    blogs = db.relationship('Blog', backref='writer')
+    blogs = db.relationship('Blog')
 
     def __init__(self, email, password):
         self.email= email
@@ -38,7 +39,8 @@ def index():
     
 @app.before_request
 def require_login():
-    allowed_routes = ['login', 'signup']
+    print('CHECKING FOR EMAIL',  request.endpoint)
+    allowed_routes = ['login', 'signup', 'index', 'display_blogs']
     if request.endpoint not in allowed_routes and 'email' not in session:
         return redirect ('/login')
 
@@ -106,6 +108,15 @@ def display_post():
 
 @app.route('/blog', methods=['POST', 'GET'])
 def display_blogs():
+    print ('we are here!!!u89')
+    if request.args:
+        blog_id = request.args.get("id")
+        blog = Blog.query.get(blog_id)
+        return render_template('post.html', blog=blog)
+    else:
+        blogs = Blog.query.all()
+        return render_template('blog.html', title="newpost", blogs=blogs)
+
     blogs = Blog.query.all()
     return render_template('blog.html', blogs=blogs)
 
@@ -143,7 +154,8 @@ def new_post():
             new_blog = Blog(title, body, writer)
             db.session.add(new_blog)
             db.session.commit()  
-            return render_template('newpost.html', title=title, body=body)
+            newblog = str(new_blog.id)
+            return redirect ('/blog?id='+newblog)
     
     return render_template('adpost.html')
 
